@@ -4,12 +4,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 dated June, 1991, or
    (at your option) version 3 dated 29 June, 2007.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-     
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -23,7 +23,7 @@
 #define BOOTREPLY                2
 #define DHCP_COOKIE              0x63825363
 
-/* The Linux in-kernel DHCP client silently ignores any packet 
+/* The Linux in-kernel DHCP client silently ignores any packet
    smaller than this. Sigh...........   */
 #define MIN_PACKETSZ             300
 
@@ -35,7 +35,7 @@
 #define OPTION_DOMAINNAME        15
 #define OPTION_BROADCAST         28
 #define OPTION_VENDOR_CLASS_OPT  43
-#define OPTION_REQUESTED_IP      50 
+#define OPTION_REQUESTED_IP      50
 #define OPTION_LEASE_TIME        51
 #define OPTION_OVERLOAD          52
 #define OPTION_MESSAGE_TYPE      53

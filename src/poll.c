@@ -4,12 +4,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 dated June, 1991, or
    (at your option) version 3 dated 29 June, 2007.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-     
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -48,24 +48,24 @@ static nfds_t nfds, arrsize = 0;
 static nfds_t fd_search(int fd)
 {
   nfds_t left, right, mid;
-  
+
   if ((right = nfds) == 0)
     return 0;
-  
+
   left = 0;
-  
+
   while (1)
-    {
-      if (right == left + 1)
-	return (pollfds[left].fd >= fd) ? left : right;
-      
-      mid = (left + right)/2;
-      
-      if (pollfds[mid].fd > fd)
-	right = mid;
-      else 
-	left = mid;
-    }
+  {
+    if (right == left + 1)
+      return (pollfds[left].fd >= fd) ? left : right;
+
+    mid = (left + right) / 2;
+
+    if (pollfds[mid].fd > fd)
+      right = mid;
+    else
+      left = mid;
+  }
 }
 
 void poll_reset(void)
@@ -81,7 +81,7 @@ int do_poll(int timeout)
 int poll_check(int fd, short event)
 {
   nfds_t i = fd_search(fd);
-  
+
   if (i < nfds && pollfds[i].fd == fd)
     return pollfds[i].revents & event;
 
@@ -90,36 +90,36 @@ int poll_check(int fd, short event)
 
 void poll_listen(int fd, short event)
 {
-   nfds_t i = fd_search(fd);
-  
-   if (i < nfds && pollfds[i].fd == fd)
-     pollfds[i].events |= event;
-   else
-     {
-       if (arrsize != nfds)
-	 memmove(&pollfds[i+1], &pollfds[i], (nfds - i) * sizeof(struct pollfd));
-       else
-	 {
-	   /* Array too small, extend. */
-	   struct pollfd *new;
+  nfds_t i = fd_search(fd);
 
-	   arrsize = (arrsize == 0) ? 64 : arrsize * 2;
+  if (i < nfds && pollfds[i].fd == fd)
+    pollfds[i].events |= event;
+  else
+  {
+    if (arrsize != nfds)
+      memmove(&pollfds[i + 1], &pollfds[i], (nfds - i) * sizeof(struct pollfd));
+    else
+    {
+      /* Array too small, extend. */
+      struct pollfd *new;
 
-	   if (!(new = whine_malloc(arrsize * sizeof(struct pollfd))))
-	     return;
+      arrsize = (arrsize == 0) ? 64 : arrsize * 2;
 
-	   if (pollfds)
-	     {
-	       memcpy(new, pollfds, i * sizeof(struct pollfd));
-	       memcpy(&new[i+1], &pollfds[i], (nfds - i) * sizeof(struct pollfd));
-	       free(pollfds);
-	     }
-	   
-	   pollfds = new;
-	 }
-       
-       pollfds[i].fd = fd;
-       pollfds[i].events = event;
-       nfds++;
-     }
+      if (!(new = whine_malloc(arrsize * sizeof(struct pollfd))))
+        return;
+
+      if (pollfds)
+      {
+        memcpy(new, pollfds, i * sizeof(struct pollfd));
+        memcpy(&new[i + 1], &pollfds[i], (nfds - i) * sizeof(struct pollfd));
+        free(pollfds);
+      }
+
+      pollfds = new;
+    }
+
+    pollfds[i].fd = fd;
+    pollfds[i].events = event;
+    nfds++;
+  }
 }

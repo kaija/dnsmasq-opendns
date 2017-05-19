@@ -4,12 +4,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 dated June, 1991, or
    (at your option) version 3 dated 29 June, 2007.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-     
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -43,7 +43,7 @@
 #define T_A		1
 #define T_NS            2
 #define T_MD            3
-#define T_MF            4             
+#define T_MF            4
 #define T_CNAME		5
 #define T_SOA		6
 #define T_MB            7
@@ -70,10 +70,10 @@
 #define T_NSEC          47
 #define T_DNSKEY        48
 #define T_NSEC3         50
-#define	T_TKEY		249		
+#define	T_TKEY		249
 #define	T_TSIG		250
 #define T_AXFR          252
-#define T_MAILB		253	
+#define T_MAILB		253
 #define T_ANY		255
 
 #define EDNS0_OPTION_MAC            65001 /* dyndns.org temporary assignment */
@@ -82,9 +82,9 @@
 #define EDNS0_OPTION_NOMCPEID       65074 /* Nominum temporary assignment */
 
 struct dns_header {
-  u16 id;
-  u8  hb3,hb4;
-  u16 qdcount,ancount,nscount,arcount;
+	u16 id;
+	u8  hb3, hb4;
+	u16 qdcount, ancount, nscount, arcount;
 };
 
 #define HB3_QR       0x80 /* Query */
@@ -103,7 +103,7 @@ struct dns_header {
 
 #define RCODE(x)           ((x)->hb4 & HB4_RCODE)
 #define SET_RCODE(x, code) (x)->hb4 = ((x)->hb4 & ~HB4_RCODE) | code
-  
+
 #define GETSHORT(s, cp) { \
 	unsigned char *t_cp = (unsigned char *)(cp); \
 	(s) = ((u16)t_cp[0] << 8) \

@@ -4,12 +4,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 dated June, 1991, or
    (at your option) version 3 dated 29 June, 2007.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-     
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -53,7 +53,7 @@
 #define SOA_EXPIRY 1209600 /* SOA expiry default */
 #define LOOP_TEST_DOMAIN "test" /* domain for loop testing, "test" is reserved by RFC 2606 and won't therefore clash */
 #define LOOP_TEST_TYPE T_TXT
- 
+
 /* compile-time options: uncomment below to enable or do eg.
    make COPTS=-DHAVE_BROKEN_RTC
 
@@ -63,9 +63,9 @@ HAVE_BROKEN_RTC
    for timing, and keep lease lengths rather than expiry times
    in its leases file. This also make dnsmasq "flash disk friendly".
    Normally, dnsmasq tries very hard to keep the on-disk leases file
-   up-to-date: rewriting it after every renewal.  When HAVE_BROKEN_RTC 
-   is in effect, the lease file is only written when a new lease is 
-   created, or an old one destroyed. (Because those are the only times 
+   up-to-date: rewriting it after every renewal.  When HAVE_BROKEN_RTC
+   is in effect, the lease file is only written when a new lease is
+   created, or an old one destroyed. (Because those are the only times
    it changes.) This vastly reduces the number of file writes, and makes
    it viable to keep the lease file on a flash filesystem.
    NOTE: when enabling or disabling this, be sure to delete any old
@@ -84,18 +84,18 @@ HAVE_SCRIPT
    define this to get the ability to call scripts on lease-change.
 
 HAVE_LUASCRIPT
-   define this to get the ability to call Lua script on lease-change. (implies HAVE_SCRIPT) 
+   define this to get the ability to call Lua script on lease-change. (implies HAVE_SCRIPT)
 
 HAVE_DBUS
    define this if you want to link against libdbus, and have dnsmasq
-   support some methods to allow (re)configuration of the upstream DNS 
+   support some methods to allow (re)configuration of the upstream DNS
    servers via DBus.
 
 HAVE_IDN
    define this if you want international domain name support.
-   NOTE: for backwards compatibility, IDN support is automatically 
-         included when internationalisation support is built, using the 
-	 *-i18n makefile targets, even if HAVE_IDN is not explicitly set.
+   NOTE: for backwards compatibility, IDN support is automatically
+         included when internationalisation support is built, using the
+    *-i18n makefile targets, even if HAVE_IDN is not explicitly set.
 
 HAVE_CONNTRACK
    define this to include code which propogates conntrack marks from
@@ -128,8 +128,8 @@ NO_SCRIPT
 NO_LARGEFILE
 NO_AUTH
 NO_INOTIFY
-   these are avilable to explictly disable compile time options which would 
-   otherwise be enabled automatically (HAVE_IPV6, >2Gb file sizes) or 
+   these are avilable to explictly disable compile time options which would
+   otherwise be enabled automatically (HAVE_IPV6, >2Gb file sizes) or
    which are enabled  by default in the distributed source tree. Building dnsmasq
    with something like "make COPTS=-DNO_SCRIPT" will do the trick.
 
@@ -141,13 +141,13 @@ NO_GMP
 LEASEFILE
 CONFFILE
 RESOLVFILE
-   the default locations of these files are determined below, but may be overridden 
+   the default locations of these files are determined below, but may be overridden
    in a build command line using COPTS.
 
 */
 
-/* Defining this builds a binary which handles time differently and works better on a system without a 
-   stable RTC (it uses uptime, not epoch time) and writes the DHCP leases file less often to avoid flash wear. 
+/* Defining this builds a binary which handles time differently and works better on a system without a
+   stable RTC (it uses uptime, not epoch time) and writes the DHCP leases file less often to avoid flash wear.
 */
 
 /* #define HAVE_BROKEN_RTC */
@@ -156,15 +156,15 @@ RESOLVFILE
    has no library dependencies other than libc */
 
 #define HAVE_DHCP
-#define HAVE_DHCP6 
+#define HAVE_DHCP6
 #define HAVE_TFTP
 #define HAVE_SCRIPT
 #define HAVE_AUTH
-#define HAVE_IPSET 
+#define HAVE_IPSET
 #define HAVE_LOOP
 
 /* Build options which require external libraries.
-   
+
    Defining HAVE_<opt>_STATIC as _well_ as HAVE_<opt> will link the library statically.
 
    You can use "make COPTS=-DHAVE_<opt>" instead of editing these.
@@ -223,10 +223,10 @@ HAVE_SOLARIS_NETWORK
    define exactly one of these to alter interaction with kernel networking.
 
 HAVE_GETOPT_LONG
-   defined when GNU-style getopt_long available. 
+   defined when GNU-style getopt_long available.
 
 HAVE_SOCKADDR_SA_LEN
-   defined if struct sockaddr has sa_len field (*BSD) 
+   defined if struct sockaddr has sa_len field (*BSD)
 */
 
 /* Must preceed __linux__ since uClinux defines __linux__ too. */
@@ -235,7 +235,7 @@ HAVE_SOCKADDR_SA_LEN
 #define HAVE_GETOPT_LONG
 #undef HAVE_SOCKADDR_SA_LEN
 /* Never use fork() on uClinux. Note that this is subtly different from the
-   --keep-in-foreground option, since it also  suppresses forking new 
+   --keep-in-foreground option, since it also  suppresses forking new
    processes for TCP connections and disables the call-a-script on leasechange
    system. It's intended for use on MMU-less kernels. */
 #define NO_FORK
@@ -279,9 +279,9 @@ HAVE_SOCKADDR_SA_LEN
 #define HAVE_SOCKADDR_SA_LEN
 /* Define before sys/socket.h is included so we get socklen_t */
 #define _BSD_SOCKLEN_T_
-/* Select the RFC_3542 version of the IPv6 socket API. 
+/* Select the RFC_3542 version of the IPv6 socket API.
    Define before netinet6/in6.h is included. */
-#define __APPLE_USE_RFC_3542 
+#define __APPLE_USE_RFC_3542
 #define NO_IPSET
 
 #elif defined(__NetBSD__)
@@ -293,8 +293,8 @@ HAVE_SOCKADDR_SA_LEN
 #define HAVE_SOLARIS_NETWORK
 #define HAVE_GETOPT_LONG
 #undef HAVE_SOCKADDR_SA_LEN
-#define ETHER_ADDR_LEN 6 
- 
+#define ETHER_ADDR_LEN 6
+
 #endif
 
 /* Decide if we're going to support IPv6 */
@@ -313,7 +313,7 @@ HAVE_SOCKADDR_SA_LEN
 #endif
 
 
-/* rules to implement compile-time option dependencies and 
+/* rules to implement compile-time option dependencies and
    the NO_XXX flags */
 
 #ifdef NO_IPV6
@@ -369,79 +369,79 @@ HAVE_SOCKADDR_SA_LEN
 
 #ifdef DNSMASQ_COMPILE_OPTS
 
-static char *compile_opts = 
+static char *compile_opts =
 #ifndef HAVE_IPV6
-"no-"
+   "no-"
 #endif
-"IPv6 "
+   "IPv6 "
 #ifndef HAVE_GETOPT_LONG
-"no-"
+   "no-"
 #endif
-"GNU-getopt "
+   "GNU-getopt "
 #ifdef HAVE_BROKEN_RTC
-"no-RTC "
+   "no-RTC "
 #endif
 #ifdef NO_FORK
-"no-MMU "
+   "no-MMU "
 #endif
 #ifndef HAVE_DBUS
-"no-"
+   "no-"
 #endif
-"DBus "
+   "DBus "
 #ifndef LOCALEDIR
-"no-"
+   "no-"
 #endif
-"i18n "
+   "i18n "
 #if !defined(LOCALEDIR) && !defined(HAVE_IDN)
-"no-"
-#endif 
-"IDN "
-#ifndef HAVE_DHCP
-"no-"
+   "no-"
 #endif
-"DHCP "
+   "IDN "
+#ifndef HAVE_DHCP
+   "no-"
+#endif
+   "DHCP "
 #if defined(HAVE_DHCP)
 #  if !defined (HAVE_DHCP6)
-     "no-"
-#  endif  
-     "DHCPv6 "
+   "no-"
+#  endif
+   "DHCPv6 "
 #  if !defined(HAVE_SCRIPT)
-     "no-scripts "
+   "no-scripts "
 #  else
 #    if !defined(HAVE_LUASCRIPT)
-       "no-"
+   "no-"
 #    endif
-     "Lua "
+   "Lua "
 #  endif
 #endif
 #ifndef HAVE_TFTP
-"no-"
+   "no-"
 #endif
-"TFTP "
+   "TFTP "
 #ifndef HAVE_CONNTRACK
-"no-"
+   "no-"
 #endif
-"conntrack "
+   "conntrack "
 #ifndef HAVE_IPSET
-"no-"
+   "no-"
 #endif
-"ipset "
+   "ipset "
 #ifndef HAVE_AUTH
-"no-"
+   "no-"
 #endif
-"auth "
+   "auth "
 #ifndef HAVE_DNSSEC
-"no-"
+   "no-"
 #endif
-"DNSSEC "
+   "DNSSEC "
 #ifndef HAVE_LOOP
-"no-"
+   "no-"
 #endif
-"loop-detect "
+   "loop-detect "
 #ifndef HAVE_INOTIFY
-"no-"
+   "no-"
 #endif
-"inotify";
+   "inotify";
 
 
 #endif

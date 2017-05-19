@@ -4,12 +4,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 dated June, 1991, or
    (at your option) version 3 dated 29 June, 2007.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-     
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -21,45 +21,45 @@ static ssize_t loop_make_probe(u32 uid);
 
 void loop_send_probes()
 {
-   struct server *serv;
-   
-   if (!option_bool(OPT_LOOP_DETECT))
-     return;
+  struct server *serv;
 
-   /* Loop through all upstream servers not for particular domains, and send a query to that server which is
-      identifiable, via the uid. If we see that query back again, then the server is looping, and we should not use it. */
-   for (serv = daemon->servers; serv; serv = serv->next)
-     if (!(serv->flags & 
-	   (SERV_LITERAL_ADDRESS | SERV_NO_ADDR | SERV_USE_RESOLV | SERV_NO_REBIND | SERV_HAS_DOMAIN | SERV_FOR_NODOTS | SERV_LOOP)))
-       {
-	 ssize_t len = loop_make_probe(serv->uid);
-	 int fd;
-	 struct randfd *rfd = NULL;
-	 
-	 if (serv->sfd)
-	   fd = serv->sfd->fd;
-	 else 
-	   {
-	     if (!(rfd = allocate_rfd(serv->addr.sa.sa_family)))
-	       continue;
-	     fd = rfd->fd;
-	   }
+  if (!option_bool(OPT_LOOP_DETECT))
+    return;
 
-	 while (retry_send(sendto(fd, daemon->packet, len, 0, 
-				  &serv->addr.sa, sa_len(&serv->addr))));
-	 
-	 free_rfd(rfd);
-       }
+  /* Loop through all upstream servers not for particular domains, and send a query to that server which is
+     identifiable, via the uid. If we see that query back again, then the server is looping, and we should not use it. */
+  for (serv = daemon->servers; serv; serv = serv->next)
+    if (!(serv->flags &
+          (SERV_LITERAL_ADDRESS | SERV_NO_ADDR | SERV_USE_RESOLV | SERV_NO_REBIND | SERV_HAS_DOMAIN | SERV_FOR_NODOTS | SERV_LOOP)))
+    {
+      ssize_t len = loop_make_probe(serv->uid);
+      int fd;
+      struct randfd *rfd = NULL;
+
+      if (serv->sfd)
+        fd = serv->sfd->fd;
+      else
+      {
+        if (!(rfd = allocate_rfd(serv->addr.sa.sa_family)))
+          continue;
+        fd = rfd->fd;
+      }
+
+      while (retry_send(sendto(fd, daemon->packet, len, 0,
+                               &serv->addr.sa, sa_len(&serv->addr))));
+
+      free_rfd(rfd);
+    }
 }
-  
+
 static ssize_t loop_make_probe(u32 uid)
 {
   struct dns_header *header = (struct dns_header *)daemon->packet;
-  unsigned char *p = (unsigned char *)(header+1);
+  unsigned char *p = (unsigned char *)(header + 1);
 
   /* packet buffer overwritten */
   daemon->srv_save = NULL;
-  
+
   header->id = rand16();
   header->ancount = header->nscount = header->arcount = htons(0);
   header->qdcount = htons(1);
@@ -79,14 +79,14 @@ static ssize_t loop_make_probe(u32 uid)
 
   return p - (unsigned char *)header;
 }
-  
+
 
 int detect_loop(char *query, int type)
 {
   int i;
   u32 uid;
   struct server *serv;
-  
+
   if (!option_bool(OPT_LOOP_DETECT))
     return 0;
 
@@ -102,14 +102,14 @@ int detect_loop(char *query, int type)
   uid = strtol(query, NULL, 16);
 
   for (serv = daemon->servers; serv; serv = serv->next)
-     if (!(serv->flags & 
-	   (SERV_LITERAL_ADDRESS | SERV_NO_ADDR | SERV_USE_RESOLV | SERV_NO_REBIND | SERV_HAS_DOMAIN | SERV_FOR_NODOTS | SERV_LOOP)) &&
-	 uid == serv->uid)
-       {
-	 serv->flags |= SERV_LOOP;
-	 check_servers(); /* log new state */
-	 return 1;
-       }
+    if (!(serv->flags &
+          (SERV_LITERAL_ADDRESS | SERV_NO_ADDR | SERV_USE_RESOLV | SERV_NO_REBIND | SERV_HAS_DOMAIN | SERV_FOR_NODOTS | SERV_LOOP)) &&
+        uid == serv->uid)
+    {
+      serv->flags |= SERV_LOOP;
+      check_servers(); /* log new state */
+      return 1;
+    }
 
   return 0;
 }
